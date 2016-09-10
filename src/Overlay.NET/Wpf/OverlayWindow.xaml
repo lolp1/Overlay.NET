@@ -1,0 +1,15 @@
+﻿<Window x:Class="Overlay.NET.Wpf.OverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="WowSharp Overlay OverlayWindow" Height="300" Width="300"
+        WindowStyle="None"
+        Topmost="True"
+        AllowsTransparency="True">
+    <Window.Background>
+        <SolidColorBrush Opacity="0.0" Color="Black" />
+    </Window.Background>
+    <Canvas x:Name="OverlayGrid" HorizontalAlignment="Left" Height="300" VerticalAlignment="Top" Width="300" />
+</Window>
