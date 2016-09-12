@@ -175,7 +175,7 @@ namespace Overlay.NET.Common
                 Save(location);
             }
 
-            var settings = Serializer.ImportFromFile<T>(location, Encoding.UTF8);
+            var settings = Serializer.ImportFromFile<T>(location, Encoding);
 
             if (settings == null)
             {
@@ -183,6 +183,7 @@ namespace Overlay.NET.Common
             }
 
             Current = settings;
+
             RaiseOnSettingsChanged(location);
         }
 

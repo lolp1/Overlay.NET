@@ -17,13 +17,13 @@ namespace Overlay.NET.Demo.Internals
         private Ellipse _ellipse;
 
         private bool _isSetup;
-        private Line _line;
-        private Polygon _polygon;
 
         // Shapes used in the demo
+        private Line _line;
+        private Polygon _polygon;
         private Rectangle _rectangle;
 
-        public ISettings<WpfDemoOverlaySettings> Settings = new SerializableSettings<WpfDemoOverlaySettings>();
+        public ISettings<WpfDemoOverlaySettings> Settings { get; } = new SerializableSettings<WpfDemoOverlaySettings>();
 
 
         public override void Enable()
@@ -45,12 +45,11 @@ namespace Overlay.NET.Demo.Internals
 
             OverlayWindow = new OverlayWindow(targetWindow);
 
-            Settings.Load();
-
             // For demo, show how to use settings
             var current = Settings.Current;
             var type = GetType();
 
+            current.UpdateRate = 100;
             current.Author = GetAuthor(type);
             current.Description = GetDescription(type);
             current.Identifier = GetIdentifier(type);
@@ -59,6 +58,7 @@ namespace Overlay.NET.Demo.Internals
 
             // File is made from above info
             Settings.Save();
+            Settings.Load();
 
             // Set up update interval and register events for the tick engine.
             _tickEngine.Interval = Settings.Current.UpdateRate.Milliseconds();
@@ -68,13 +68,6 @@ namespace Overlay.NET.Demo.Internals
 
         private void OnTick(object sender, EventArgs eventArgs)
         {
-            // Only want to set them up once.
-            if (!_isSetup)
-            {
-                SetUp();
-                _isSetup = true;
-            }
-
             // This will only be true if the target window is active
             // (or very recently has been, depends on your update rate)
             if (OverlayWindow.IsVisible)
@@ -84,15 +77,23 @@ namespace Overlay.NET.Demo.Internals
         }
 
         private void OnPreTick(object sender, EventArgs eventArgs)
-        {
-            // Ensure window is shown or hidden correctly prior to updating
-            if (!TargetWindow.IsActivated && OverlayWindow.IsVisible)
+        {            // Only want to set them up once.
+            if (!_isSetup)
             {
-                OverlayWindow.Hide();
-                return;
+                SetUp();
+                _isSetup = true;
             }
 
-            if (TargetWindow.IsActivated && !OverlayWindow.IsVisible)
+            var activated = TargetWindow.IsActivated;
+            var visible = OverlayWindow.IsVisible;
+
+            // Ensure window is shown or hidden correctly prior to updating
+            if (!activated && visible)
+            {
+                OverlayWindow.Hide();
+            }
+
+            else if (activated && !visible)
             {
                 OverlayWindow.Show();
             }
@@ -109,6 +110,11 @@ namespace Overlay.NET.Demo.Internals
         // Clear objects
         public override void Dispose()
         {
+            if (_isDisposed)
+            {
+                return;
+            }
+
             if (IsEnabled)
             {
                 Disable();
@@ -119,7 +125,16 @@ namespace Overlay.NET.Demo.Internals
             OverlayWindow = null;
             _tickEngine.Stop();
             Settings.Save();
+
             base.Dispose();
+            _isDisposed = true;
+        }
+
+        private bool _isDisposed;
+        ~WpfOverlayDemo()
+        {
+
+            Dispose();
         }
 
         // Random shapes.. thanks Julian ^_^
