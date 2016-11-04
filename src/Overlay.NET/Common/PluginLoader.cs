@@ -62,8 +62,8 @@ namespace Overlay.NET.Common
             return from pluginFile in pluginFiles
                 let extension = Path.GetExtension(pluginFile)
                 where
-                    extension != null && File.Exists(pluginFile) &&
-                    extension.Equals(".dll", StringComparison.InvariantCultureIgnoreCase)
+                (extension != null) && File.Exists(pluginFile) &&
+                extension.Equals(".dll", StringComparison.InvariantCultureIgnoreCase)
                 let assembly = Assembly.LoadFrom(pluginFile)
                 from type in assembly.GetExportedTypes()
                 where typeof(TPlugin).IsAssignableFrom(type) && IsInstanciablePlugin(type)

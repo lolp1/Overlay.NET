@@ -7,13 +7,13 @@ namespace Overlay.NET.Common
 {
     public class SerializableSettings<T> : ISettings<T> where T : new()
     {
-        private T _current;
-        private bool _currentExist;
-        private Encoding _encoding;
-        private RelativeFile _file;
-        private string _name;
-        private string _path;
-        private ISerializer _serializer;
+        T _current;
+        bool _currentExist;
+        Encoding _encoding;
+        RelativeFile _file;
+        string _name;
+        string _path;
+        ISerializer _serializer;
 
         /// <summary>
         ///     Gets or sets the file.

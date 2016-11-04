@@ -9,7 +9,7 @@ namespace Overlay.NET.Common
         /// <summary>
         ///     The wait timer
         /// </summary>
-        private readonly WaitTimer _waitTimer = new WaitTimer();
+        readonly WaitTimer _waitTimer = new WaitTimer();
 
         /// <summary>
         ///     Gets or sets the interval.

@@ -28,7 +28,7 @@ namespace Overlay.NET.Common
             Loggers.Add("File", FileLogger.Instance);
         }
 
-        private static Dictionary<string, ILogger> Loggers { get; }
+        static Dictionary<string, ILogger> Loggers { get; }
 
         public static Func<LogLevel, string, object[], string> LogFormatterFunc { get; set; }
 
@@ -77,7 +77,7 @@ namespace Overlay.NET.Common
             WriteLogEntry(LogLevel.Fatal, format, args);
         }
 
-        private static void WriteLogEntry(LogLevel logLevel, string format, params object[] args)
+        static void WriteLogEntry(LogLevel logLevel, string format, params object[] args)
         {
             var formatted = LogFormatterFunc(logLevel, format, args);
 
@@ -87,9 +87,9 @@ namespace Overlay.NET.Common
             }
         }
 
-        private static string DefaultFormatter(LogLevel type, string format, params object[] args)
+        static string DefaultFormatter(LogLevel type, string format, params object[] args)
         {
-            if (args != null && args.Any())
+            if ((args != null) && args.Any())
             {
                 format = string.Format(format, args);
             }

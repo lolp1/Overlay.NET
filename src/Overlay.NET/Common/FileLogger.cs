@@ -8,7 +8,7 @@ namespace Overlay.NET.Common
     {
         public static readonly FileLogger Instance = new FileLogger();
 
-        private readonly StreamWriter _stream;
+        readonly StreamWriter _stream;
 
         public FileLogger(RelativeFile file)
         {
@@ -22,7 +22,7 @@ namespace Overlay.NET.Common
             _stream = new StreamWriter(Path, true) {AutoFlush = true};
         }
 
-        private FileLogger()
+        FileLogger()
         {
             var file = new RelativeFile
             {

@@ -15,7 +15,7 @@ namespace Overlay.NET.Common
         /// <returns>The plugin's Author, or empty string if it fails.</returns>
         public static string GetAuthor(Type type)
         {
-            var attribute = getAttribute(type);
+            var attribute = GetAttribute(type);
             return attribute == null ? string.Empty : attribute.Author ?? string.Empty;
         }
 
@@ -26,7 +26,7 @@ namespace Overlay.NET.Common
         /// <returns>The plugin's Description, or empty string if it fails.</returns>
         public static string GetDescription(Type type)
         {
-            var attribute = getAttribute(type);
+            var attribute = GetAttribute(type);
             return attribute == null ? string.Empty : attribute.Description ?? string.Empty;
         }
 
@@ -37,7 +37,7 @@ namespace Overlay.NET.Common
         /// <returns>The identifier for the plugin, or empty string if it fails.</returns>
         public static string GetIdentifier(Type type)
         {
-            var attribute = getAttribute(type);
+            var attribute = GetAttribute(type);
             return attribute == null ? string.Empty : attribute.Identifier ?? string.Empty;
         }
 
@@ -48,7 +48,7 @@ namespace Overlay.NET.Common
         /// <returns>The plugin's Name, or empty string if it fails.</returns>
         public static string GetName(Type type)
         {
-            var attribute = getAttribute(type);
+            var attribute = GetAttribute(type);
             return attribute == null ? string.Empty : attribute.Name ?? string.Empty;
         }
 
@@ -59,7 +59,7 @@ namespace Overlay.NET.Common
         /// <returns>The plugin's Version, or empty string if it fails.</returns>
         public static string GetVersion(Type type)
         {
-            var attribute = getAttribute(type);
+            var attribute = GetAttribute(type);
             return attribute == null ? string.Empty : attribute.Version ?? string.Empty;
         }
 
@@ -70,7 +70,7 @@ namespace Overlay.NET.Common
         /// <returns>Whether the Type is a registered plugin or not.</returns>
         public static bool IsRegisteredPlugin(Type type)
         {
-            return getAttribute(type) != null;
+            return GetAttribute(type) != null;
         }
 
         /// <summary>
@@ -78,11 +78,11 @@ namespace Overlay.NET.Common
         /// </summary>
         /// <param name="type">The plugin's Type.</param>
         /// <returns>The plugin's RegisteredPluginAttribute, or null if it fails.</returns>
-        private static RegisterPluginAttribute getAttribute(Type type)
+        static RegisterPluginAttribute GetAttribute(Type type)
         {
             return
                 (RegisterPluginAttribute)
-                    type.GetCustomAttributes(typeof(RegisterPluginAttribute), false).FirstOrDefault();
+                type.GetCustomAttributes(typeof(RegisterPluginAttribute), false).FirstOrDefault();
         }
 
         /// <summary>

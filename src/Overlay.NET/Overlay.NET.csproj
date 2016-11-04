@@ -42,7 +42,20 @@
       <HintPath>..\packages\Process.NET.1.0.2\lib\Process.NET.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SharpDX, Version=3.1.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.3.1.1\lib\net45\SharpDX.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpDX.Direct2D1, Version=3.1.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct2D1.3.1.1\lib\net45\SharpDX.Direct2D1.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=3.1.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DXGI.3.1.1\lib\net45\SharpDX.DXGI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
@@ -63,6 +76,7 @@
     <Compile Include="Common\ISerializer.cs" />
     <Compile Include="Common\ISettings.cs" />
     <Compile Include="Common\Log.cs" />
+    <Compile Include="Common\Native.cs" />
     <Compile Include="Common\PluginBase.cs" />
     <Compile Include="Common\PluginLoader.cs" />
     <Compile Include="Common\RelativeFile.cs" />
@@ -71,6 +85,11 @@
     <Compile Include="Common\TimeSpanExtensions.cs" />
     <Compile Include="Common\WaitTimer.cs" />
     <Compile Include="Common\XmlSerializerEx.cs" />
+    <Compile Include="Directx\Direct2DRenderer.cs" />
+    <Compile Include="Directx\DirectExternalXOverlayPlugin.cs" />
+    <Compile Include="Directx\DirectXOverlayWindow.cs" />
+    <Compile Include="Directx\TextLayoutBuffer.cs" />
+    <Compile Include="Common\WindowConstants.cs" />
     <Compile Include="OverlayPlugin.cs" />
     <Compile Include="Wpf\OverlayWindow.xaml.cs">
       <DependentUpon>OverlayWindow.xaml</DependentUpon>
@@ -89,7 +108,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Common\WindowExtensions.cs" />
-    <Compile Include="Wpf\WpfOverlay.cs" />
+    <Compile Include="Wpf\WpfOverlayPlugin.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -104,6 +123,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

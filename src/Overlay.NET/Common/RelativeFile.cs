@@ -9,7 +9,7 @@ namespace Overlay.NET.Common
     /// </summary>
     public class RelativeFile
     {
-        private string _directory;
+        string _directory;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="RelativeFile" /> class.

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media;
 using Overlay.NET.Common;
 using Process.NET.Windows;
 
@@ -10,7 +11,7 @@ namespace Overlay.NET.Wpf
     /// </summary>
     public partial class OverlayWindow : Window
     {
-        private readonly IWindow _targetWindow;
+        readonly IWindow _targetWindow;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="OverlayWindow" /> class.
@@ -21,6 +22,8 @@ namespace Overlay.NET.Wpf
             _targetWindow = targetWindow;
             InitializeComponent();
         }
+
+        public event EventHandler<DrawingContext> Draw;
 
         /// <summary>
         ///     Updates this instance.
@@ -45,6 +48,21 @@ namespace Overlay.NET.Wpf
             // There is no other way to do this.
             // Source: https://social.msdn.microsoft.com/Forums/en-US/c32889d3-effa-4b82-b179-76489ffa9f7d/how-to-clicking-throughpassing-shapesellipserectangle?forum=wpf
             this.MakeWindowTransparent();
+        }
+
+        /// <summary>
+        ///     When overridden in a derived class, participates in rendering operations that are directed by the layout system.
+        ///     The rendering instructions for this element are not used directly when this method is invoked, and are instead
+        ///     preserved for later asynchronous use by layout and drawing.
+        /// </summary>
+        /// <param name="drawingContext">
+        ///     The drawing instructions for a specific element. This context is provided to the layout
+        ///     system.
+        /// </param>
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            OnDraw(drawingContext);
+            base.OnRender(drawingContext);
         }
 
         /// <summary>
@@ -82,6 +100,15 @@ namespace Overlay.NET.Wpf
         public void Remove(int index)
         {
             OverlayGrid.Children.RemoveAt(index);
+        }
+
+        /// <summary>
+        ///     Called when [draw].
+        /// </summary>
+        /// <param name="e">The e.</param>
+        protected virtual void OnDraw(DrawingContext e)
+        {
+            Draw?.Invoke(this, e);
         }
     }
 }

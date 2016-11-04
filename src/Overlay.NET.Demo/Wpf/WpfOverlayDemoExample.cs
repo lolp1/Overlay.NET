@@ -3,28 +3,31 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Overlay.NET.Common;
+using Overlay.NET.Demo.Internals;
 using Overlay.NET.Wpf;
 using Process.NET.Windows;
+using OverlayWindow = Overlay.NET.Wpf.OverlayWindow;
 
-namespace Overlay.NET.Demo.Internals
+namespace Overlay.NET.Demo.Wpf
 {
     [RegisterPlugin("WpfOverlayDemo-1", "Jacob Kemple", "WpfOverlayDemo", "0.0", "A basic demo of the WPF overlay.")]
-    public class WpfOverlayDemo : WpfOverlayPlugin
+    public class WpfOverlayDemoExample : WpfOverlayPlugin
     {
-// Used to limit update rates via timestamps 
+        // Used to limit update rates via timestamps 
         // This way we can avoid thread issues with wanting to delay updates
-        private readonly TickEngine _tickEngine = new TickEngine();
-        private Ellipse _ellipse;
+        readonly TickEngine _tickEngine = new TickEngine();
+        Ellipse _ellipse;
 
-        private bool _isSetup;
+        bool _isDisposed;
+
+        bool _isSetup;
 
         // Shapes used in the demo
-        private Line _line;
-        private Polygon _polygon;
-        private Rectangle _rectangle;
+        Line _line;
+        Polygon _polygon;
+        Rectangle _rectangle;
 
-        public ISettings<WpfDemoOverlaySettings> Settings { get; } = new SerializableSettings<WpfDemoOverlaySettings>();
-
+        public ISettings<DemoOverlaySettings> Settings { get; } = new SerializableSettings<DemoOverlaySettings>();
 
         public override void Enable()
         {
@@ -49,7 +52,7 @@ namespace Overlay.NET.Demo.Internals
             var current = Settings.Current;
             var type = GetType();
 
-            current.UpdateRate = 100;
+            current.UpdateRate = 1000/60;
             current.Author = GetAuthor(type);
             current.Description = GetDescription(type);
             current.Identifier = GetIdentifier(type);
@@ -66,7 +69,7 @@ namespace Overlay.NET.Demo.Internals
             _tickEngine.Tick += OnTick;
         }
 
-        private void OnTick(object sender, EventArgs eventArgs)
+        void OnTick(object sender, EventArgs eventArgs)
         {
             // This will only be true if the target window is active
             // (or very recently has been, depends on your update rate)
@@ -76,8 +79,9 @@ namespace Overlay.NET.Demo.Internals
             }
         }
 
-        private void OnPreTick(object sender, EventArgs eventArgs)
-        {            // Only want to set them up once.
+        void OnPreTick(object sender, EventArgs eventArgs)
+        {
+            // Only want to set them up once.
             if (!_isSetup)
             {
                 SetUp();
@@ -98,7 +102,6 @@ namespace Overlay.NET.Demo.Internals
                 OverlayWindow.Show();
             }
         }
-
 
         public override void Update()
         {
@@ -130,15 +133,13 @@ namespace Overlay.NET.Demo.Internals
             _isDisposed = true;
         }
 
-        private bool _isDisposed;
-        ~WpfOverlayDemo()
+        ~WpfOverlayDemoExample()
         {
-
             Dispose();
         }
 
         // Random shapes.. thanks Julian ^_^
-        private void SetUp()
+        void SetUp()
         {
             _polygon = new Polygon
             {
