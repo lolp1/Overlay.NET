@@ -4,6 +4,15 @@
 
 Overlay.NET aims to be An easy-to-use overlay library that allows you to render visuals to other windows, and offers lots of overlay options, from external WPF windows to shared process directx hooks to do the overlay rendering. 
 
+
+
+## NuGet: https://www.nuget.org/packages/Overlay.NET/
+* Note: Please report issues. I am new to NuGet but if you want to use D3D functionality you might need to add the following packages in addition to the Overlay.NET package to use D3D overlay (not sure..).
+- SharpDX
+- SharpDXDirect2D1
+- SharpDXDXGI
+- Process.NET
+
 ## Features 
 - WPF based overlay
 - Directx based overlay
