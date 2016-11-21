@@ -12,8 +12,8 @@ namespace Overlay.NET.Demo.Directx
          "A basic demo of the DirectXoverlay.")]
     public class DirectxOverlayPluginExample : DirectXOverlayPlugin
     {
-        readonly ISettings<DemoOverlaySettings> _settings = new SerializableSettings<DemoOverlaySettings>();
         readonly TickEngine _tickEngine = new TickEngine();
+        public readonly ISettings<DemoOverlaySettings> Settings = new SerializableSettings<DemoOverlaySettings>();
         int _displayFps;
         int _font;
         int _hugeFont;
@@ -32,7 +32,7 @@ namespace Overlay.NET.Demo.Directx
             OverlayWindow = new DirectXOverlayWindow(targetWindow.Handle, false);
 
             // For demo, show how to use settings
-            var current = _settings.Current;
+            var current = Settings.Current;
             var type = GetType();
 
             current.UpdateRate = 1000/60;
@@ -43,8 +43,8 @@ namespace Overlay.NET.Demo.Directx
             current.Version = GetVersion(type);
 
             // File is made from above info
-            _settings.Save();
-            _settings.Load();
+            Settings.Save();
+            Settings.Load();
             Console.Title = @"OverlayExample";
 
             OverlayWindow = new DirectXOverlayWindow(targetWindow.Handle, false);
@@ -61,7 +61,7 @@ namespace Overlay.NET.Demo.Directx
             _displayFps = 0;
             _i = 0;
             // Set up update interval and register events for the tick engine.
-            _tickEngine.Interval = _settings.Current.UpdateRate.Milliseconds();
+            _tickEngine.Interval = Settings.Current.UpdateRate.Milliseconds();
             _tickEngine.PreTick += OnPreTick;
             _tickEngine.Tick += OnTick;
         }
@@ -109,7 +109,6 @@ namespace Overlay.NET.Demo.Directx
         public override void Update()
         {
             _tickEngine.Pulse();
-            base.Update();
         }
 
         protected void InternalRender()

@@ -8,7 +8,7 @@ namespace Overlay.NET.Demo.Directx
 {
     public class DirectXOverlayDemo
     {
-        DirectxOverlayPluginExample _directXoverlayPluginExample;
+        OverlayPlugin _directXoverlayPluginExample;
         ProcessSharp _processSharp;
 
         public void StartDemo()
@@ -31,16 +31,33 @@ namespace Overlay.NET.Demo.Directx
             _processSharp = new ProcessSharp(process, MemoryType.Remote);
 
             _directXoverlayPluginExample.Initialize(_processSharp.WindowFactory.MainWindow);
+
             _directXoverlayPluginExample.Enable();
+
+            var d3DOverlay = (DirectxOverlayPluginExample) _directXoverlayPluginExample;
+
+            // Log some info about the overlay.
+            Log.Debug("Starting update loop (open the process you specified and drag around)");
+            Log.Debug("Update rate: " + d3DOverlay.Settings.Current.UpdateRate.Milliseconds());
+
+            var info = d3DOverlay.Settings.Current;
+
+            Log.Debug($"Author: {info.Author}");
+            Log.Debug($"Description: {info.Description}");
+            Log.Debug($"Name: {info.Name}");
+            Log.Debug($"Identifier: {info.Identifier}");
+            Log.Debug($"Version: {info.Version}");
+
+            Log.Info("Note: Settings are saved to a settings folder in your main app folder.");
+
+            Log.Info("Give your window focus to enable the overlay (and unfocus to disable..)");
+
             Log.Info("Close the console to end the demo.");
 
             while (true)
             {
                 _directXoverlayPluginExample.Update();
             }
-
-            Log.Info("Close the console to end the demo.");
-            Log.Debug("Demo complete.");
         }
     }
 }
