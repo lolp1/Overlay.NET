@@ -29,8 +29,6 @@ namespace Overlay.NET.Demo.Directx
             // Set target window by calling the base method
             base.Initialize(targetWindow);
 
-            OverlayWindow = new DirectXOverlayWindow(targetWindow.Handle, false);
-
             // For demo, show how to use settings
             var current = Settings.Current;
             var type = GetType();
@@ -66,30 +64,23 @@ namespace Overlay.NET.Demo.Directx
             _tickEngine.Tick += OnTick;
         }
 
-        void OnTick(object sender, EventArgs e)
-        {
-            if (OverlayWindow.IsVisible)
-            {
-                OverlayWindow.SetBounds(TargetWindow.X, TargetWindow.Y, TargetWindow.Width, TargetWindow.Height);
-                InternalRender();
+        void OnTick(object sender, EventArgs e) {
+            if (!OverlayWindow.IsVisible) {
+                return;
             }
+            OverlayWindow.SetSize(TargetWindow.Width, TargetWindow.Height);
+            InternalRender();
         }
 
         void OnPreTick(object sender, EventArgs e)
         {
-            var activated = TargetWindow.IsActivated;
-            var visible = OverlayWindow.IsVisible;
-
-            // Ensure window is shown or hidden correctly prior to updating
-            if (!activated && visible)
-            {
-                OverlayWindow.Hide();
-            }
-
-            else if (activated && !visible)
-            {
+            if (TargetWindow.IsActivated) {
                 OverlayWindow.Show();
             }
+            else {
+                OverlayWindow.Hide();
+            }
+      
         }
 
         // ReSharper disable once RedundantOverriddenMember
