@@ -1,5 +1,7 @@
 using System;
+using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Overlay.NET.Common;
 using Process.NET;
 using Process.NET.Memory;
@@ -30,11 +32,22 @@ namespace Overlay.NET.Demo.Directx
             _directXoverlayPluginExample = new DirectxOverlayPluginExample();
             _processSharp = new ProcessSharp(process, MemoryType.Remote);
 
+
+
+            Log.Debug("Enter the frame rate the overlay should render at. e.g '60'");
+            var result = Console.ReadLine();
+
+            var fpsValid = int.TryParse(Convert.ToString(result, CultureInfo.InvariantCulture), NumberStyles.Any,
+                NumberFormatInfo.InvariantInfo, out int fps);
+            if (!fpsValid) {
+                Log.Debug($"{result} is not valid. Please reload and try again by entering an integer such as '30' or '60' ");
+                return;
+            }
+
+            var d3DOverlay = (DirectxOverlayPluginExample)_directXoverlayPluginExample;
+            d3DOverlay.Settings.Current.UpdateRate = 1000 / fps;
             _directXoverlayPluginExample.Initialize(_processSharp.WindowFactory.MainWindow);
-
             _directXoverlayPluginExample.Enable();
-
-            var d3DOverlay = (DirectxOverlayPluginExample) _directXoverlayPluginExample;
 
             // Log some info about the overlay.
             Log.Debug("Starting update loop (open the process you specified and drag around)");

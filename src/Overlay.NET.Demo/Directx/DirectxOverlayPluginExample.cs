@@ -33,7 +33,9 @@ namespace Overlay.NET.Demo.Directx
             var current = Settings.Current;
             var type = GetType();
 
-            current.UpdateRate = 1000/60;
+            if (current.UpdateRate == 0)
+                current.UpdateRate = 1000 / 60;
+
             current.Author = GetAuthor(type);
             current.Description = GetDescription(type);
             current.Identifier = GetIdentifier(type);
@@ -59,7 +61,7 @@ namespace Overlay.NET.Demo.Directx
             _displayFps = 0;
             _i = 0;
             // Set up update interval and register events for the tick engine.
-            _tickEngine.Interval = Settings.Current.UpdateRate.Milliseconds();
+
             _tickEngine.PreTick += OnPreTick;
             _tickEngine.Tick += OnTick;
         }
@@ -68,24 +70,29 @@ namespace Overlay.NET.Demo.Directx
             if (!OverlayWindow.IsVisible) {
                 return;
             }
-            OverlayWindow.SetSize(TargetWindow.Width, TargetWindow.Height);
+
             InternalRender();
         }
 
         void OnPreTick(object sender, EventArgs e)
         {
-            if (TargetWindow.IsActivated) {
-                OverlayWindow.Show();
-            }
-            else {
+            var targetWindowIsActivated = TargetWindow.IsActivated;
+            if (!targetWindowIsActivated && OverlayWindow.IsVisible)
+            {
+                _watch.Stop();
+                ClearScreen();
                 OverlayWindow.Hide();
             }
-      
+            else if (targetWindowIsActivated && !OverlayWindow.IsVisible)
+            {
+                OverlayWindow.Show();
+            }
         }
 
         // ReSharper disable once RedundantOverriddenMember
         public override void Enable()
         {
+            _tickEngine.Interval = Settings.Current.UpdateRate.Milliseconds();
             _tickEngine.IsTicking = true;
             base.Enable();
         }
@@ -104,6 +111,11 @@ namespace Overlay.NET.Demo.Directx
 
         protected void InternalRender()
         {
+            if (!_watch.IsRunning)
+            {
+                _watch.Start();
+            }
+
             OverlayWindow.Graphics.BeginScene();
             OverlayWindow.Graphics.ClearScene();
 
@@ -174,5 +186,13 @@ namespace Overlay.NET.Demo.Directx
             OverlayWindow.Dispose();
             base.Dispose();
         }
+
+        private void ClearScreen()
+        {
+            OverlayWindow.Graphics.BeginScene();
+            OverlayWindow.Graphics.ClearScene();
+            OverlayWindow.Graphics.EndScene();
+        }
+
     }
 }
