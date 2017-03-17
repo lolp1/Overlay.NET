@@ -7,18 +7,13 @@ Overlay.NET aims to be An easy-to-use overlay library that allows you to render 
 
 
 ## NuGet: https://www.nuget.org/packages/Overlay.NET/
-* Note: Please report issues. I am new to NuGet but if you want to use D3D functionality you might need to add the following packages in addition to the Overlay.NET package to use D3D overlay (not sure..).
-- SharpDX
-- SharpDXDirect2D1
-- SharpDXDXGI
-- Process.NET
 
 ## Features 
-- WPF based overlay
-- Directx based overlay
-- Soon: Shared process (aka injected) directX engine to use the games directx device instead
+- WPF based overlay.
+- Directx based overlay.
+- Soon: Shared process, or 'in-process' directX engine to use the games directx device instead.
 
-## Demo / Examples
+## Demos / Examples
 You may find the demo code here: https://github.com/lolp1/Overlay.NET/tree/master/src/Overlay.NET.Demo
 
 You may view a quick demo video of the WPF/directx overlay below.
@@ -29,7 +24,8 @@ alt="Overlay demo" width="300" height="200" border="10" /></a>
 
 ## Contributing (please do!)
 - If you like it, star it. 
-- If you want to add to it, include a working example in your pull request, preferably added to the demo project.
+- If you love it, contribute. 
+- If you want to add to the sample/demo apps, include a working example in your pull request, preferably added to the demo project.
 
 ## Credits
 Julian Forrester aka Arcanaeum for showing me how to make a basic wpf overlay.

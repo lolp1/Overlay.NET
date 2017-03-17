@@ -5,12 +5,11 @@ using Overlay.NET.Common;
 
 namespace Overlay.NET.Directx
 {
-    public class DirectXOverlayWindow
-    {
+    public class DirectXOverlayWindow {
         /// <summary>
         ///     The margin
         /// </summary>
-        Native.RawMargin _margin;
+        private Native.RawMargin _margin;
 
         /// <summary>
         ///     The graphics
@@ -246,16 +245,11 @@ namespace Overlay.NET.Directx
         /// <summary>
         ///     Extends the frame into client.
         /// </summary>
-        void ExtendFrameIntoClient()
-        {
-            _margin = new Native.RawMargin
-            {
-                cxLeftWidth = X,
-                cxRightWidth = Width,
-                cyBottomHeight = Height,
-                cyTopHeight = Y
-            };
-
+        void ExtendFrameIntoClient() {
+            _margin.cxLeftWidth = X;
+            _margin.cxRightWidth = Width;
+            _margin.cyBottomHeight = Height;
+            _margin.cyTopHeight = Y;        
             Native.DwmExtendFrameIntoClientArea(Handle, ref _margin);
         }
 

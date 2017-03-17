@@ -7,20 +7,16 @@ namespace Overlay.NET.Common
 {
     public static class WindowExtensions
     {
-        const int GwlExstyle = -20;
-        const int WsExTransparent = 0x00000020;
+        private const int GwlExstyle = -20;
+        private const int WsExTransparent = 0x00000020;
 
         public static void MakeWindowTransparent(this Window wnd)
         {
+            if (!wnd.IsInitialized)
+                throw new Exception("The extension method MakeWindowTransparent can not be called prior to the window being initialized.");
             var hwnd = new WindowInteropHelper(wnd).Handle;
-            var extendedStyle = GetWindowLong(hwnd, GwlExstyle);
-            SetWindowLong(hwnd, GwlExstyle, extendedStyle | WsExTransparent);
+            var extendedStyle = Native.GetWindowLongPtr(hwnd, GwlExstyle);
+            Native.SetWindowLongPtr(hwnd, GwlExstyle, new IntPtr(extendedStyle.ToInt32() | WsExTransparent));
         }
-
-        [DllImport("user32.dll")]
-        static extern int SetWindowLong(IntPtr hwnd, int index, int newStyle);
-
-        [DllImport("user32.dll")]
-        static extern int GetWindowLong(IntPtr hwnd, int index);
     }
 }
