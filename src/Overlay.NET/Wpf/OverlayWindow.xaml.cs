@@ -4,21 +4,18 @@ using System.Windows.Media;
 using Overlay.NET.Common;
 using Process.NET.Windows;
 
-namespace Overlay.NET.Wpf
-{
+namespace Overlay.NET.Wpf {
     /// <summary>
     ///     Interaction logic for OverlayWindow.xaml
     /// </summary>
-    public partial class OverlayWindow : Window
-    {
-        readonly IWindow _targetWindow;
+    public partial class OverlayWindow : Window {
+        private readonly IWindow _targetWindow;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="OverlayWindow" /> class.
         /// </summary>
         /// <param name="targetWindow">The window.</param>
-        public OverlayWindow(IWindow targetWindow)
-        {
+        public OverlayWindow(IWindow targetWindow) {
             _targetWindow = targetWindow;
             InitializeComponent();
         }
@@ -28,8 +25,7 @@ namespace Overlay.NET.Wpf
         /// <summary>
         ///     Updates this instance.
         /// </summary>
-        public void Update()
-        {
+        public void Update() {
             Width = _targetWindow.Width;
             Height = _targetWindow.Height;
             Left = _targetWindow.X;
@@ -40,8 +36,7 @@ namespace Overlay.NET.Wpf
         ///     Raises the <see cref="E:System.Windows.Window.SourceInitialized" /> event.
         /// </summary>
         /// <param name="e">An <see cref="T:System.EventArgs" /> that contains the event data.</param>
-        protected override void OnSourceInitialized(EventArgs e)
-        {
+        protected override void OnSourceInitialized(EventArgs e) {
             base.OnSourceInitialized(e);
             // We need to do this in order to allow shapes
             // drawn on the canvas to be click-through. 
@@ -59,8 +54,7 @@ namespace Overlay.NET.Wpf
         ///     The drawing instructions for a specific element. This context is provided to the layout
         ///     system.
         /// </param>
-        protected override void OnRender(DrawingContext drawingContext)
-        {
+        protected override void OnRender(DrawingContext drawingContext) {
             OnDraw(drawingContext);
             base.OnRender(drawingContext);
         }
@@ -69,46 +63,31 @@ namespace Overlay.NET.Wpf
         ///     Adds the specified element.
         /// </summary>
         /// <param name="element">The element.</param>
-        public void Add(UIElement element)
-        {
-            OverlayGrid.Children.Add(element);
-        }
+        public void Add(UIElement element) => OverlayGrid.Children.Add(element);
 
         /// <summary>
         ///     Removes the specified element.
         /// </summary>
         /// <param name="element">The element.</param>
-        public void Remove(UIElement element)
-        {
-            OverlayGrid.Children.Remove(element);
-        }
+        public void Remove(UIElement element) => OverlayGrid.Children.Remove(element);
 
         /// <summary>
         ///     Adds the specified element.
         /// </summary>
         /// <param name="element">The element.</param>
         /// <param name="index">The index.</param>
-        public void Add(UIElement element, int index)
-        {
-            OverlayGrid.Children[index] = element;
-        }
+        public void Add(UIElement element, int index) => OverlayGrid.Children[index] = element;
 
         /// <summary>
         ///     Removes the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
-        public void Remove(int index)
-        {
-            OverlayGrid.Children.RemoveAt(index);
-        }
+        public void Remove(int index) => OverlayGrid.Children.RemoveAt(index);
 
         /// <summary>
         ///     Called when [draw].
         /// </summary>
         /// <param name="e">The e.</param>
-        protected virtual void OnDraw(DrawingContext e)
-        {
-            Draw?.Invoke(this, e);
-        }
+        protected virtual void OnDraw(DrawingContext e) => Draw?.Invoke(this, e);
     }
 }

@@ -6,23 +6,19 @@ using Overlay.NET.Common;
 using Process.NET;
 using Process.NET.Memory;
 
-namespace Overlay.NET.Demo.Directx
-{
-    public class DirectXOverlayDemo
-    {
-        OverlayPlugin _directXoverlayPluginExample;
-        ProcessSharp _processSharp;
+namespace Overlay.NET.Demo.Directx {
+    public class DirectXOverlayDemo {
+        private OverlayPlugin _directXoverlayPluginExample;
+        private ProcessSharp _processSharp;
 
-        public void StartDemo()
-        {
+        public void StartDemo() {
             Log.Debug(@"Please type the process name of the window you want to attach to, e.g 'notepad.");
             Log.Debug("Note: If there is more than one process found, the first will be used.");
 
             var processName = Console.ReadLine();
 
             var process = System.Diagnostics.Process.GetProcessesByName(processName).FirstOrDefault();
-            if (process == null)
-            {
+            if (process == null) {
                 Log.Warn($"No process by the name of {processName} was found.");
                 Log.Warn("Please open one or use a different name and restart the demo.");
                 Console.ReadLine();
@@ -31,8 +27,6 @@ namespace Overlay.NET.Demo.Directx
 
             _directXoverlayPluginExample = new DirectxOverlayPluginExample();
             _processSharp = new ProcessSharp(process, MemoryType.Remote);
-
-
 
             Log.Debug("Enter the frame rate the overlay should render at. e.g '60'");
             var result = Console.ReadLine();
@@ -44,7 +38,7 @@ namespace Overlay.NET.Demo.Directx
                 return;
             }
 
-            var d3DOverlay = (DirectxOverlayPluginExample)_directXoverlayPluginExample;
+            var d3DOverlay = (DirectxOverlayPluginExample) _directXoverlayPluginExample;
             d3DOverlay.Settings.Current.UpdateRate = 1000 / fps;
             _directXoverlayPluginExample.Initialize(_processSharp.WindowFactory.MainWindow);
             _directXoverlayPluginExample.Enable();
@@ -67,8 +61,7 @@ namespace Overlay.NET.Demo.Directx
 
             Log.Info("Close the console to end the demo.");
 
-            while (true)
-            {
+            while (true) {
                 _directXoverlayPluginExample.Update();
             }
         }

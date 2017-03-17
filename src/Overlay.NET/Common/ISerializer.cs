@@ -1,12 +1,10 @@
 using System.Text;
 
-namespace Overlay.NET.Common
-{
+namespace Overlay.NET.Common {
     /// <summary>
     ///     Interface that defines common ways to serialize/deserialize objects to and from strings.
     /// </summary>
-    public interface ISerializer
-    {
+    public interface ISerializer {
         /// <summary>
         ///     Serializes the specified object and returns the document.
         /// </summary>

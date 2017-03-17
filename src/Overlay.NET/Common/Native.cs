@@ -1,10 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Overlay.NET.Common
-{
-    class Native
-    {
+namespace Overlay.NET.Common {
+    internal class Native {
         [DllImport("user32.dll")]
         public static extern IntPtr CreateWindowEx(
             uint dwExStyle,
@@ -48,7 +46,9 @@ namespace Overlay.NET.Common
 
         [DllImport("dwmapi.dll")]
         public static extern void DwmExtendFrameIntoClientArea(IntPtr hWnd, ref RawMargin pMargins);
-        public static IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong) => IntPtr.Size == 8 ? SetWindowLongPtr64(hWnd, nIndex, dwNewLong) : new IntPtr(SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
+
+        public static IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
+            => IntPtr.Size == 8 ? SetWindowLongPtr64(hWnd, nIndex, dwNewLong) : new IntPtr(SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
 
         [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
         private static extern int SetWindowLong32(IntPtr hWnd, int nIndex, int dwNewLong);
@@ -67,8 +67,7 @@ namespace Overlay.NET.Common
         public static IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex) => IntPtr.Size == 8 ? GetWindowLongPtr64(hWnd, nIndex) : GetWindowLongPtr32(hWnd, nIndex);
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct Rect
-        {
+        public struct Rect {
             public int Left;
             public int Top;
             public int Right;
@@ -76,15 +75,13 @@ namespace Overlay.NET.Common
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct Point
-        {
+        public struct Point {
             public int X;
             public int Y;
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct RawMargin
-        {
+        public struct RawMargin {
             public int cxLeftWidth;
             public int cxRightWidth;
             public int cyTopHeight;

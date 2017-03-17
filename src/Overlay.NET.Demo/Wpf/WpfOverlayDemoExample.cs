@@ -8,41 +8,35 @@ using Overlay.NET.Wpf;
 using Process.NET.Windows;
 using OverlayWindow = Overlay.NET.Wpf.OverlayWindow;
 
-namespace Overlay.NET.Demo.Wpf
-{
+namespace Overlay.NET.Demo.Wpf {
     [RegisterPlugin("WpfOverlayDemo-1", "Jacob Kemple", "WpfOverlayDemo", "0.0", "A basic demo of the WPF overlay.")]
-    public class WpfOverlayDemoExample : WpfOverlayPlugin
-    {
+    public class WpfOverlayDemoExample : WpfOverlayPlugin {
+        public ISettings<DemoOverlaySettings> Settings { get; } = new SerializableSettings<DemoOverlaySettings>();
         // Used to limit update rates via timestamps 
         // This way we can avoid thread issues with wanting to delay updates
-        readonly TickEngine _tickEngine = new TickEngine();
-        Ellipse _ellipse;
+        private readonly TickEngine _tickEngine = new TickEngine();
+        private Ellipse _ellipse;
 
-        bool _isDisposed;
+        private bool _isDisposed;
 
-        bool _isSetup;
+        private bool _isSetup;
 
         // Shapes used in the demo
-        Line _line;
-        Polygon _polygon;
-        Rectangle _rectangle;
+        private Line _line;
+        private Polygon _polygon;
+        private Rectangle _rectangle;
 
-        public ISettings<DemoOverlaySettings> Settings { get; } = new SerializableSettings<DemoOverlaySettings>();
-
-        public override void Enable()
-        {
+        public override void Enable() {
             _tickEngine.IsTicking = true;
             base.Enable();
         }
 
-        public override void Disable()
-        {
+        public override void Disable() {
             _tickEngine.IsTicking = false;
             base.Disable();
         }
 
-        public override void Initialize(IWindow targetWindow)
-        {
+        public override void Initialize(IWindow targetWindow) {
             // Set target window by calling the base method
             base.Initialize(targetWindow);
 
@@ -52,7 +46,7 @@ namespace Overlay.NET.Demo.Wpf
             var current = Settings.Current;
             var type = GetType();
 
-            current.UpdateRate = 1000/60;
+            current.UpdateRate = 1000 / 60;
             current.Author = GetAuthor(type);
             current.Description = GetDescription(type);
             current.Identifier = GetIdentifier(type);
@@ -69,21 +63,17 @@ namespace Overlay.NET.Demo.Wpf
             _tickEngine.Tick += OnTick;
         }
 
-        void OnTick(object sender, EventArgs eventArgs)
-        {
+        private void OnTick(object sender, EventArgs eventArgs) {
             // This will only be true if the target window is active
             // (or very recently has been, depends on your update rate)
-            if (OverlayWindow.IsVisible)
-            {
+            if (OverlayWindow.IsVisible) {
                 OverlayWindow.Update();
             }
         }
 
-        void OnPreTick(object sender, EventArgs eventArgs)
-        {
+        private void OnPreTick(object sender, EventArgs eventArgs) {
             // Only want to set them up once.
-            if (!_isSetup)
-            {
+            if (!_isSetup) {
                 SetUp();
                 _isSetup = true;
             }
@@ -92,34 +82,24 @@ namespace Overlay.NET.Demo.Wpf
             var visible = OverlayWindow.IsVisible;
 
             // Ensure window is shown or hidden correctly prior to updating
-            if (!activated && visible)
-            {
+            if (!activated && visible) {
                 OverlayWindow.Hide();
             }
 
-            else if (activated && !visible)
-            {
+            else if (activated && !visible) {
                 OverlayWindow.Show();
             }
         }
 
-        public override void Update()
-        {
-            // Raises the events only when the given interval has
-            // passed since the last event, so it is okay to call every frame
-            _tickEngine.Pulse();
-        }
+        public override void Update() => _tickEngine.Pulse();
 
         // Clear objects
-        public override void Dispose()
-        {
-            if (_isDisposed)
-            {
+        public override void Dispose() {
+            if (_isDisposed) {
                 return;
             }
 
-            if (IsEnabled)
-            {
+            if (IsEnabled) {
                 Disable();
             }
 
@@ -133,18 +113,14 @@ namespace Overlay.NET.Demo.Wpf
             _isDisposed = true;
         }
 
-        ~WpfOverlayDemoExample()
-        {
+        ~WpfOverlayDemoExample() {
             Dispose();
         }
 
         // Random shapes.. thanks Julian ^_^
-        void SetUp()
-        {
-            _polygon = new Polygon
-            {
-                Points = new PointCollection(5)
-                {
+        private void SetUp() {
+            _polygon = new Polygon {
+                Points = new PointCollection(5) {
                     new Point(100, 150),
                     new Point(120, 130),
                     new Point(140, 150),
@@ -161,8 +137,7 @@ namespace Overlay.NET.Demo.Wpf
             OverlayWindow.Add(_polygon);
 
             // Create a line
-            _line = new Line
-            {
+            _line = new Line {
                 X1 = 100,
                 X2 = 300,
                 Y1 = 200,
@@ -174,8 +149,7 @@ namespace Overlay.NET.Demo.Wpf
             OverlayWindow.Add(_line);
 
             // Create an ellipse (circle)
-            _ellipse = new Ellipse
-            {
+            _ellipse = new Ellipse {
                 Width = 15,
                 Height = 15,
                 Margin = new Thickness(300, 300, 0, 0),
@@ -186,8 +160,7 @@ namespace Overlay.NET.Demo.Wpf
             OverlayWindow.Add(_ellipse);
 
             // Create a rectangle
-            _rectangle = new Rectangle
-            {
+            _rectangle = new Rectangle {
                 RadiusX = 2,
                 RadiusY = 2,
                 Width = 50,

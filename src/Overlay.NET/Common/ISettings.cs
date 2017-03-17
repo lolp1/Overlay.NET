@@ -1,11 +1,9 @@
-﻿namespace Overlay.NET.Common
-{
+﻿namespace Overlay.NET.Common {
     /// <summary>
     ///     Interface that defines a way to load and save settings.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ISettings<out T>
-    {
+    public interface ISettings<out T> {
         /// <summary>
         ///     Gets the current settings instance
         /// </summary>

@@ -9,40 +9,36 @@ using Overlay.NET.Common;
 using Process.NET;
 using Process.NET.Memory;
 
-namespace Overlay.NET.Demo.Wpf
-{
+namespace Overlay.NET.Demo.Wpf {
     /// <summary>
     /// </summary>
-    public class WpfOverlayExampleDemo
-    {
+    public class WpfOverlayExampleDemo {
         /// <summary>
         ///     The overlay
         /// </summary>
-        static OverlayPlugin _overlay;
+        private static OverlayPlugin _overlay;
 
         /// <summary>
         ///     The process sharp
         /// </summary>
-        static ProcessSharp _processSharp;
+        private static ProcessSharp _processSharp;
 
         /// <summary>
         ///     The work
         /// </summary>
-        static bool _work;
+        private static bool _work;
 
         /// <summary>
         ///     Starts the demo.
         /// </summary>
-        public void StartDemo()
-        {
+        public void StartDemo() {
             Log.Debug(@"Please type the process name of the window you want to attach to, e.g 'notepad.");
             Log.Debug("Note: If there is more than one process found, the first will be used.");
 
             // Set up objects/overlay
             var processName = Console.ReadLine();
             var process = System.Diagnostics.Process.GetProcessesByName(processName).FirstOrDefault();
-            if (process == null)
-            {
+            if (process == null) {
                 Log.Warn($"No process by the name of {processName} was found.");
                 Log.Warn("Please open one or use a different name and restart the demo.");
                 Console.ReadLine();
@@ -83,16 +79,14 @@ namespace Overlay.NET.Demo.Wpf
             wpfOverlay.OverlayWindow.Draw += OnDraw;
 
             // Do work
-            while (_work)
-            {
+            while (_work) {
                 _overlay.Update();
             }
 
             Log.Debug("Demo complete.");
         }
 
-        static void OnDraw(object sender, DrawingContext context)
-        {
+        private static void OnDraw(object sender, DrawingContext context) {
             // Draw a formatted text string into the DrawingContext.
             context.DrawText(
                 new FormattedText("Click Me!", CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight,

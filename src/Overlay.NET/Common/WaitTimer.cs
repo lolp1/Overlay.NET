@@ -1,12 +1,10 @@
 using System;
 
-namespace Overlay.NET.Common
-{
+namespace Overlay.NET.Common {
     /// <summary>
     /// </summary>
     /// <seealso cref="System.EventArgs" />
-    public sealed class WaitTimerEventArgs : EventArgs
-    {
+    public sealed class WaitTimerEventArgs : EventArgs {
         /// <summary>
         ///     Gets or sets the time finished.
         /// </summary>
@@ -34,27 +32,7 @@ namespace Overlay.NET.Common
 
     /// <summary>
     /// </summary>
-    public class WaitTimer
-    {
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="WaitTimer" /> class.
-        /// </summary>
-        /// <param name="waitTime">The wait time.</param>
-        public WaitTimer(TimeSpan waitTime)
-        {
-            WaitTime = waitTime;
-            Stop();
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="WaitTimer" /> class.
-        /// </summary>
-        public WaitTimer()
-        {
-            WaitTime = TimeSpan.Zero;
-            Stop();
-        }
-
+    public class WaitTimer {
         /// <summary>
         ///     Gets or sets the wait time.
         /// </summary>
@@ -96,6 +74,23 @@ namespace Overlay.NET.Common
         public TimeSpan TimeLeft => EndTime - DateTime.Now;
 
         /// <summary>
+        ///     Initializes a new instance of the <see cref="WaitTimer" /> class.
+        /// </summary>
+        /// <param name="waitTime">The wait time.</param>
+        public WaitTimer(TimeSpan waitTime) {
+            WaitTime = waitTime;
+            Stop();
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="WaitTimer" /> class.
+        /// </summary>
+        public WaitTimer() {
+            WaitTime = TimeSpan.Zero;
+            Stop();
+        }
+
+        /// <summary>
         ///     Occurs when [finished].
         /// </summary>
         public event EventHandler<WaitTimerEventArgs> Finished;
@@ -103,32 +98,23 @@ namespace Overlay.NET.Common
         /// <summary>
         ///     Resets this instance.
         /// </summary>
-        public void Reset()
-        {
-            StartTime = DateTime.Now;
-        }
+        public void Reset() => StartTime = DateTime.Now;
 
         /// <summary>
         ///     Stops this instance.
         /// </summary>
-        public void Stop()
-        {
-            StartTime = DateTime.Now.AddDays(-5.0);
-        }
+        public void Stop() => StartTime = DateTime.Now.AddDays(-5.0);
 
         /// <summary>
         ///     Updates this instance.
         /// </summary>
         /// <returns></returns>
-        public bool Update()
-        {
-            if (!IsFinished)
-            {
+        public bool Update() {
+            if (!IsFinished) {
                 return false;
             }
 
-            OnFinished(new WaitTimerEventArgs
-            {
+            OnFinished(new WaitTimerEventArgs {
                 TimeFinished = DateTime.Now,
                 TimeStarted = StartTime,
                 WaitTime = WaitTime
@@ -141,9 +127,6 @@ namespace Overlay.NET.Common
         ///     Raises the <see cref="E:Finished" /> event.
         /// </summary>
         /// <param name="e">The <see cref="WaitTimerEventArgs" /> instance containing the event data.</param>
-        protected virtual void OnFinished(WaitTimerEventArgs e)
-        {
-            Finished?.Invoke(this, e);
-        }
+        protected virtual void OnFinished(WaitTimerEventArgs e) => Finished?.Invoke(this, e);
     }
 }

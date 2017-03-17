@@ -3,95 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Overlay.NET.Common;
 
-namespace Overlay.NET.Directx
-{
+namespace Overlay.NET.Directx {
     public class DirectXOverlayWindow {
-        /// <summary>
-        ///     The margin
-        /// </summary>
-        private Native.RawMargin _margin;
-
-        /// <summary>
-        ///     The graphics
-        /// </summary>
-        public Direct2DRenderer Graphics;
-
-        /// <summary>
-        ///     Makes a transparent Fullscreen window
-        /// </summary>
-        /// <param name="limitFps">VSync</param>
-        /// <exception cref="Exception">Could not create OverlayWindow</exception>
-        public DirectXOverlayWindow(bool limitFps = true)
-        {
-            IsDisposing = false;
-            IsVisible = true;
-            IsTopMost = true;
-
-            ParentWindowExists = false;
-
-            X = 0;
-            Y = 0;
-            Width = Native.GetSystemMetrics(WindowConstants.SmCxScreen);
-            Height = Native.GetSystemMetrics(WindowConstants.SmCyScreen);
-
-            ParentWindow = IntPtr.Zero;
-
-            if (!CreateWindow())
-            {
-                throw new Exception("Could not create OverlayWindow");
-            }
-
-            Graphics = new Direct2DRenderer(Handle, limitFps);
-
-            SetBounds(X, Y, Width, Height);
-        }
-
-        /// <summary>
-        ///     Makes a transparent window which adjust it's size and position to fit the parent window
-        /// </summary>
-        /// <param name="parent">HWND/Handle of a window</param>
-        /// <param name="limitFps">VSync</param>
-        /// <exception cref="Exception">
-        ///     The handle of the parent window isn't valid
-        ///     or
-        ///     Could not create OverlayWindow
-        /// </exception>
-        public DirectXOverlayWindow(IntPtr parent, bool limitFps = true)
-        {
-            if (parent == IntPtr.Zero)
-            {
-                throw new Exception("The handle of the parent window isn't valid");
-            }
-
-            Native.Rect bounds;
-            Native.GetWindowRect(parent, out bounds);
-
-            IsDisposing = false;
-            IsVisible = true;
-            IsTopMost = true;
-
-            ParentWindowExists = true;
-
-            X = bounds.Left;
-            Y = bounds.Top;
-
-            Width = bounds.Right - bounds.Left;
-            Height = bounds.Bottom - bounds.Top;
-
-            ParentWindow = parent;
-
-            if (!CreateWindow())
-            {
-                throw new Exception("Could not create OverlayWindow");
-            }
-
-            Graphics = new Direct2DRenderer(Handle, limitFps);
-
-            SetBounds(X, Y, Width, Height);
-
-            Task.Run(() => ParentServiceThread());
-        }
-
         /// <summary>
         ///     Gets a value indicating whether this instance is disposing.
         /// </summary>
@@ -173,18 +86,97 @@ namespace Overlay.NET.Directx
         public IntPtr ParentWindow { get; }
 
         /// <summary>
+        ///     The margin
+        /// </summary>
+        private Native.RawMargin _margin;
+
+        /// <summary>
+        ///     The graphics
+        /// </summary>
+        public Direct2DRenderer Graphics;
+
+        /// <summary>
+        ///     Makes a transparent Fullscreen window
+        /// </summary>
+        /// <param name="limitFps">VSync</param>
+        /// <exception cref="Exception">Could not create OverlayWindow</exception>
+        public DirectXOverlayWindow(bool limitFps = true) {
+            IsDisposing = false;
+            IsVisible = true;
+            IsTopMost = true;
+
+            ParentWindowExists = false;
+
+            X = 0;
+            Y = 0;
+            Width = Native.GetSystemMetrics(WindowConstants.SmCxScreen);
+            Height = Native.GetSystemMetrics(WindowConstants.SmCyScreen);
+
+            ParentWindow = IntPtr.Zero;
+
+            if (!CreateWindow()) {
+                throw new Exception("Could not create OverlayWindow");
+            }
+
+            Graphics = new Direct2DRenderer(Handle, limitFps);
+
+            SetBounds(X, Y, Width, Height);
+        }
+
+        /// <summary>
+        ///     Makes a transparent window which adjust it's size and position to fit the parent window
+        /// </summary>
+        /// <param name="parent">HWND/Handle of a window</param>
+        /// <param name="limitFps">VSync</param>
+        /// <exception cref="Exception">
+        ///     The handle of the parent window isn't valid
+        ///     or
+        ///     Could not create OverlayWindow
+        /// </exception>
+        public DirectXOverlayWindow(IntPtr parent, bool limitFps = true) {
+            if (parent == IntPtr.Zero) {
+                throw new Exception("The handle of the parent window isn't valid");
+            }
+
+            Native.Rect bounds;
+            Native.GetWindowRect(parent, out bounds);
+
+            IsDisposing = false;
+            IsVisible = true;
+            IsTopMost = true;
+
+            ParentWindowExists = true;
+
+            X = bounds.Left;
+            Y = bounds.Top;
+
+            Width = bounds.Right - bounds.Left;
+            Height = bounds.Bottom - bounds.Top;
+
+            ParentWindow = parent;
+
+            if (!CreateWindow()) {
+                throw new Exception("Could not create OverlayWindow");
+            }
+
+            Graphics = new Direct2DRenderer(Handle, limitFps);
+
+            SetBounds(X, Y, Width, Height);
+
+            Task.Run(() => ParentServiceThread());
+        }
+
+        /// <summary>
         ///     Finalizes an instance of the <see cref="DirectXOverlayWindow" /> class.
         /// </summary>
-        ~DirectXOverlayWindow()
-        {
+        ~DirectXOverlayWindow() {
             Dispose();
         }
 
         /// <summary>
         ///     Clean up used ressources and destroy window
         /// </summary>
-        public void Dispose()
-        {
+        public void Dispose() {
             IsDisposing = true;
             Graphics.Dispose();
             Native.DestroyWindow(Handle);
@@ -196,8 +188,7 @@ namespace Overlay.NET.Directx
         /// <returns>
         ///     true on success
         /// </returns>
-        bool CreateWindow()
-        {
+        private bool CreateWindow() {
             Handle = Native.CreateWindowEx(
                 WindowConstants.WindowExStyleDx,
                 WindowConstants.DesktopClass,
@@ -212,8 +203,7 @@ namespace Overlay.NET.Directx
                 IntPtr.Zero,
                 IntPtr.Zero);
 
-            if (Handle == IntPtr.Zero)
-            {
+            if (Handle == IntPtr.Zero) {
                 return false;
             }
 
@@ -225,18 +215,15 @@ namespace Overlay.NET.Directx
         /// <summary>
         ///     resize and set new position if the parent window's bounds change
         /// </summary>
-        void ParentServiceThread()
-        {
-            while (!IsDisposing)
-            {
+        private void ParentServiceThread() {
+            while (!IsDisposing) {
                 Thread.Sleep(10);
 
                 Native.Rect bounds;
                 Native.GetWindowRect(ParentWindow, out bounds);
 
-                if ((X != bounds.Left) || (Y != bounds.Top) || (Width != bounds.Right - bounds.Left) ||
-                    (Height != bounds.Bottom - bounds.Top))
-                {
+                if (X != bounds.Left || Y != bounds.Top || Width != bounds.Right - bounds.Left ||
+                    Height != bounds.Bottom - bounds.Top) {
                     SetBounds(bounds.Left, bounds.Top, bounds.Right - bounds.Left, bounds.Bottom - bounds.Top);
                 }
             }
@@ -245,11 +232,11 @@ namespace Overlay.NET.Directx
         /// <summary>
         ///     Extends the frame into client.
         /// </summary>
-        void ExtendFrameIntoClient() {
+        private void ExtendFrameIntoClient() {
             _margin.cxLeftWidth = X;
             _margin.cxRightWidth = Width;
             _margin.cyBottomHeight = Height;
-            _margin.cyTopHeight = Y;        
+            _margin.cyTopHeight = Y;
             Native.DwmExtendFrameIntoClientArea(Handle, ref _margin);
         }
 
@@ -258,8 +245,7 @@ namespace Overlay.NET.Directx
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
-        public void SetPos(int x, int y)
-        {
+        public void SetPos(int x, int y) {
             X = x;
             Y = y;
 
@@ -282,8 +268,7 @@ namespace Overlay.NET.Directx
         /// </summary>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
-        public void SetSize(int width, int height)
-        {
+        public void SetSize(int width, int height) {
             Width = width;
             Height = height;
 
@@ -310,8 +295,7 @@ namespace Overlay.NET.Directx
         /// <param name="y">The y.</param>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
-        public void SetBounds(int x, int y, int width, int height)
-        {
+        public void SetBounds(int x, int y, int width, int height) {
             X = x;
             Y = y;
             Width = width;
@@ -336,10 +320,8 @@ namespace Overlay.NET.Directx
         /// <summary>
         ///     Shows this instance.
         /// </summary>
-        public void Show()
-        {
-            if (IsVisible)
-            {
+        public void Show() {
+            if (IsVisible) {
                 return;
             }
 
@@ -352,10 +334,8 @@ namespace Overlay.NET.Directx
         /// <summary>
         ///     Hides this instance.
         /// </summary>
-        public void Hide()
-        {
-            if (!IsVisible)
-            {
+        public void Hide() {
+            if (!IsVisible) {
                 return;
             }
 

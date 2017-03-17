@@ -3,51 +3,17 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
-namespace Overlay.NET.Common
-{
-    public class SerializableSettings<T> : ISettings<T> where T : new()
-    {
-        T _current;
-        bool _currentExist;
-        Encoding _encoding;
-        RelativeFile _file;
-        string _name;
-        string _path;
-        ISerializer _serializer;
-
+namespace Overlay.NET.Common {
+    public class SerializableSettings<T> : ISettings<T> where T : new() {
         /// <summary>
         ///     Gets or sets the file.
         /// </summary>
         /// <value>
         ///     The file.
         /// </value>
-        public RelativeFile SettingsFile
-        {
+        public RelativeFile SettingsFile {
             get { return _file ?? (_file = RelativeFile.XmlFile(typeof(T).Name, "Settings")); }
             set { _file = value; }
-        }
-
-        /// <summary>
-        ///     Gets or sets the serializer.
-        /// </summary>
-        /// <value>
-        ///     The serializer.
-        /// </value>
-        protected ISerializer Serializer
-        {
-            get
-            {
-                if (_serializer != null)
-                {
-                    return _serializer;
-                }
-                _serializer = new XmlSerializerEx();
-                SettingsFile.Extension = ".xml";
-                SettingsFile.SubDirectory = "XmlSettings";
-
-                return _serializer;
-            }
-            set { _serializer = value; }
         }
 
         /// <summary>
@@ -64,12 +30,9 @@ namespace Overlay.NET.Common
         /// <value>
         ///     The path.
         /// </value>
-        public string Path
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_path))
-                {
+        public string Path {
+            get {
+                if (string.IsNullOrEmpty(_path)) {
                     _path = SettingsFile.GetFullPath();
                 }
 
@@ -84,12 +47,9 @@ namespace Overlay.NET.Common
         /// <value>
         ///     The name.
         /// </value>
-        public string Name
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_name))
-                {
+        public string Name {
+            get {
+                if (string.IsNullOrEmpty(_name)) {
                     _name = typeof(T).Name;
                 }
 
@@ -104,8 +64,7 @@ namespace Overlay.NET.Common
         /// <value>
         ///     The encoding.
         /// </value>
-        public Encoding Encoding
-        {
+        public Encoding Encoding {
             get { return _encoding ?? (_encoding = Encoding.UTF8); }
             set { _encoding = value; }
         }
@@ -116,12 +75,9 @@ namespace Overlay.NET.Common
         /// <value>
         ///     The current.
         /// </value>
-        public T Current
-        {
-            get
-            {
-                if (_currentExist)
-                {
+        public T Current {
+            get {
+                if (_currentExist) {
                     return _current;
                 }
                 _current = new T();
@@ -130,26 +86,42 @@ namespace Overlay.NET.Common
                 return _current;
             }
 
-            set
-            {
+            set {
                 _current = value;
                 _currentExist = true;
             }
         }
 
         /// <summary>
+        ///     Gets or sets the serializer.
+        /// </summary>
+        /// <value>
+        ///     The serializer.
+        /// </value>
+        protected ISerializer Serializer {
+            get {
+                if (_serializer != null) {
+                    return _serializer;
+                }
+                _serializer = new XmlSerializerEx();
+                SettingsFile.Extension = ".xml";
+                SettingsFile.SubDirectory = "XmlSettings";
+
+                return _serializer;
+            }
+            set { _serializer = value; }
+        }
+
+        /// <summary>
         ///     Saves the settings to the specified file.
         /// </summary>
         /// <param name="file">The file.</param>
-        public void Save(string file = "")
-        {
-            if (string.IsNullOrEmpty(file))
-            {
+        public void Save(string file = "") {
+            if (string.IsNullOrEmpty(file)) {
                 file = Path;
             }
 
-            if (File.Exists(file) && BackupOnSave)
-            {
+            if (File.Exists(file) && BackupOnSave) {
                 BackupSettings(file);
             }
 
@@ -163,22 +135,18 @@ namespace Overlay.NET.Common
         ///     The location of the file./param>
         ///     <exception cref="System.ArgumentNullException"></exception>
         /// </param>
-        public void Load(string location = "")
-        {
-            if (string.IsNullOrEmpty(location))
-            {
+        public void Load(string location = "") {
+            if (string.IsNullOrEmpty(location)) {
                 location = Path;
             }
 
-            if (!File.Exists(location))
-            {
+            if (!File.Exists(location)) {
                 Save(location);
             }
 
             var settings = Serializer.ImportFromFile<T>(location, Encoding);
 
-            if (settings == null)
-            {
+            if (settings == null) {
                 throw new ArgumentNullException(nameof(settings));
             }
 
@@ -187,22 +155,27 @@ namespace Overlay.NET.Common
             RaiseOnSettingsChanged(location);
         }
 
+        private T _current;
+        private bool _currentExist;
+        private Encoding _encoding;
+        private RelativeFile _file;
+        private string _name;
+        private string _path;
+        private ISerializer _serializer;
+
         /// <summary>
         ///     Backups the settings if one already exist.
         /// </summary>
         /// <param name="target">The target to back up settings to.</param>
         /// <exception cref="System.ArgumentNullException"></exception>
-        protected void BackupSettings(string target = "")
-        {
-            if (string.IsNullOrEmpty(target))
-            {
+        protected void BackupSettings(string target = "") {
+            if (string.IsNullOrEmpty(target)) {
                 target = Path;
             }
 
             var extension = System.IO.Path.GetExtension(target);
 
-            if (extension == null)
-            {
+            if (extension == null) {
                 throw new ArgumentNullException(Path + " does not contain an extension.");
             }
 
@@ -223,9 +196,6 @@ namespace Overlay.NET.Common
         ///     Raises the on settings changed.
         /// </summary>
         /// <param name="e">The e.</param>
-        protected virtual void RaiseOnSettingsChanged(string e)
-        {
-            OnSettingsChanged?.Invoke(this, e);
-        }
+        protected virtual void RaiseOnSettingsChanged(string e) => OnSettingsChanged?.Invoke(this, e);
     }
 }
