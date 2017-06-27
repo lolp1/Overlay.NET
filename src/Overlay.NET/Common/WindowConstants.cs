@@ -34,6 +34,11 @@ namespace Overlay.NET.Common {
                                             | 0x20; //WS_EX_TRANSPARENT
 
         /// <summary>
+        ///     The blue style dx
+        /// </summary>
+        public const uint BlurFlags = 0x00000001; //DWM_BB_ENABLE
+
+        /// <summary>
         ///     The HWND notopmost
         /// </summary>
         public const int HwndNotopmost = -2;

@@ -47,6 +47,9 @@ namespace Overlay.NET.Common {
         [DllImport("dwmapi.dll")]
         public static extern void DwmExtendFrameIntoClientArea(IntPtr hWnd, ref RawMargin pMargins);
 
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmEnableBlurBehindWindow(IntPtr hWnd, ref DWM_BLURBEHIND pBlurBehind);
+
         public static IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
             => IntPtr.Size == 8 ? SetWindowLongPtr64(hWnd, nIndex, dwNewLong) : new IntPtr(SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
 
@@ -86,6 +89,15 @@ namespace Overlay.NET.Common {
             public int cxRightWidth;
             public int cyTopHeight;
             public int cyBottomHeight;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct DWM_BLURBEHIND
+        {
+            public uint dwFlags;
+            public int fEnable;
+            public uint hRgnBlur;
+            public int fTransitionOnMaximized;
         }
     }
 }

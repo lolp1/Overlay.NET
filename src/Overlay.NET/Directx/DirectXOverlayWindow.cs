@@ -91,6 +91,11 @@ namespace Overlay.NET.Directx {
         private Native.RawMargin _margin;
 
         /// <summary>
+        ///     The blue
+        /// </summary>
+        private Native.DWM_BLURBEHIND blur;
+
+        /// <summary>
         ///     The graphics
         /// </summary>
         public Direct2DRenderer Graphics;
@@ -208,6 +213,12 @@ namespace Overlay.NET.Directx {
             }
 
             ExtendFrameIntoClient();
+            
+            blur.fEnable = 1;
+            blur.dwFlags = WindowConstants.BlurFlags;
+            if (0x0 != Native.DwmEnableBlurBehindWindow(Handle, ref blur)) {
+                return false;
+            }
 
             return true;
         }
