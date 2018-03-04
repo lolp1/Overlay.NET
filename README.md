@@ -18,7 +18,7 @@ You may find the demo code here: https://github.com/lolp1/Overlay.NET/tree/maste
 
 You may view a quick demo video of the WPF/directx overlay below.
 
-<a href="hhttps://www.youtube.com/watch?v=HN7cdjoMZxc
+<a href="https://www.youtube.com/watch?v=HN7cdjoMZxc
 " target="_blank"><img src="http://img.youtube.com/vi/aq6LG3IML7s/0.jpg" 
 alt="Overlay demo" width="300" height="200" border="10" /></a>
 
