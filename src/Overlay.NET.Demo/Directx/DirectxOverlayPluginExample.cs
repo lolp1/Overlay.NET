@@ -68,6 +68,7 @@ namespace Overlay.NET.Demo.Directx {
                 return;
             }
 
+            OverlayWindow.Update();
             InternalRender();
         }
 
