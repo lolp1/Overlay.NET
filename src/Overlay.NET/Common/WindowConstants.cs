@@ -15,7 +15,7 @@ namespace Overlay.NET.Common {
         /// <summary>
         ///     The desktop class
         /// </summary>
-        public const string DesktopClass = "#32769";
+        public const string DesktopClass = "Static"; // System Class for a static control
 
         /// <summary>
         ///     The window style dx
@@ -32,6 +32,11 @@ namespace Overlay.NET.Common {
                                             | 0x80 //WS_EX_TOOLWINDOW -> Not in taskbar
                                             | 0x8 //WS_EX_TOPMOST
                                             | 0x20; //WS_EX_TRANSPARENT
+
+        /// <summary>
+        ///     The layered window attribute alpha (LWA_ALPHA)
+        /// </summary>
+        public const int LwaAlpha = 0x00000002;
 
         /// <summary>
         ///     The HWND notopmost

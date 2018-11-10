@@ -162,8 +162,6 @@ namespace Overlay.NET.Directx {
             Graphics = new Direct2DRenderer(Handle, limitFps);
 
             SetBounds(X, Y, Width, Height);
-
-            Task.Run(() => ParentServiceThread());
         }
 
         /// <summary>
@@ -207,25 +205,26 @@ namespace Overlay.NET.Directx {
                 return false;
             }
 
+            Native.SetLayeredWindowAttributes(Handle, 0, 255, WindowConstants.LwaAlpha);
+
             ExtendFrameIntoClient();
 
             return true;
         }
 
         /// <summary>
-        ///     resize and set new position if the parent window's bounds change
+        /// Resize and set new position if the parent window's bounds change
         /// </summary>
-        private void ParentServiceThread() {
-            while (!IsDisposing) {
-                Thread.Sleep(10);
+        public void Update() {
+            if (!ParentWindowExists)
+                return;
 
-                Native.Rect bounds;
-                Native.GetWindowRect(ParentWindow, out bounds);
+            Native.Rect bounds;
+            Native.GetWindowRect(ParentWindow, out bounds);
 
-                if (X != bounds.Left || Y != bounds.Top || Width != bounds.Right - bounds.Left ||
-                    Height != bounds.Bottom - bounds.Top) {
-                    SetBounds(bounds.Left, bounds.Top, bounds.Right - bounds.Left, bounds.Bottom - bounds.Top);
-                }
+            if (X != bounds.Left || Y != bounds.Top || Width != bounds.Right - bounds.Left ||
+                Height != bounds.Bottom - bounds.Top) {
+                SetBounds(bounds.Left, bounds.Top, bounds.Right - bounds.Left, bounds.Bottom - bounds.Top);
             }
         }
 
@@ -249,16 +248,7 @@ namespace Overlay.NET.Directx {
             X = x;
             Y = y;
 
-            Native.Point pos;
-            pos.X = x;
-            pos.Y = y;
-
-            Native.Point size;
-            size.X = Width;
-            size.Y = Height;
-
-            Native.UpdateLayeredWindow(Handle, IntPtr.Zero, ref pos, ref size, IntPtr.Zero, IntPtr.Zero, 0, IntPtr.Zero,
-                0);
+            Native.SetWindowPos(Handle, WindowConstants.HwndTopmost, X, Y, Width, Height, 0);
 
             ExtendFrameIntoClient();
         }
@@ -272,16 +262,7 @@ namespace Overlay.NET.Directx {
             Width = width;
             Height = height;
 
-            Native.Point pos;
-            pos.X = X;
-            pos.Y = Y;
-
-            Native.Point size;
-            size.X = Width;
-            size.Y = Height;
-
-            Native.UpdateLayeredWindow(Handle, IntPtr.Zero, ref pos, ref size, IntPtr.Zero, IntPtr.Zero, 0, IntPtr.Zero,
-                0);
+            Native.SetWindowPos(Handle, WindowConstants.HwndTopmost, X, Y, Width, Height, 0);
 
             Graphics.AutoResize(Width, Height);
 
@@ -301,16 +282,7 @@ namespace Overlay.NET.Directx {
             Width = width;
             Height = height;
 
-            Native.Point pos;
-            pos.X = x;
-            pos.Y = y;
-
-            Native.Point size;
-            size.X = Width;
-            size.Y = Height;
-
-            Native.UpdateLayeredWindow(Handle, IntPtr.Zero, ref pos, ref size, IntPtr.Zero, IntPtr.Zero, 0, IntPtr.Zero,
-                0);
+            Native.SetWindowPos(Handle, WindowConstants.HwndTopmost, X, Y, Width, Height, 0);
 
             Graphics?.AutoResize(Width, Height);
 
