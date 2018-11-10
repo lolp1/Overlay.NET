@@ -30,4 +30,4 @@ alt="Overlay demo" width="300" height="200" border="10" /></a>
 ## Credits
 Julian Forrester aka Arcanaeum for showing me how to make a basic wpf overlay.
 https://github.com/YatoDev/DirectXOverlay - The external directx2D overlay implementation.
-Google
+xaviermonin (https://github.com/xaviermonin) - fixed the most annoying directx overlay bug for the creators window update for every ones benifit. 
