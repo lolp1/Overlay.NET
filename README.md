@@ -11,6 +11,7 @@ Overlay.NET aims to be An easy-to-use overlay library that allows you to render 
 ## Features 
 - WPF based overlay.
 - Directx based overlay.
+- DirectX code is 99% from this project, check it out if interested in dx based overlays - https://github.com/michel-pi/GameOverlay.Net
 - Soon: Shared process, or 'in-process' directX engine to use the games directx device instead.
 
 ## Demos / Examples
@@ -29,5 +30,5 @@ alt="Overlay demo" width="300" height="200" border="10" /></a>
 
 ## Credits
 - Julian Forrester aka Arcanaeum for showing me how to make a basic wpf overlay.
-- https://github.com/YatoDev/DirectXOverlay - The external directx2D overlay implementation.
+- https://github.com/michel-pi/GameOverlay.Net - The external directx2D overlay implementation.
 - xaviermonin (https://github.com/xaviermonin) - fixed the most annoying directx overlay bug for the creators window update.
